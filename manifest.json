@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Web AI Summarizer",
+  "version": "1.0.0",
+  "description": "使用AI智能分析网页内容：生成摘要、回答问题、识别题目",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "exclude_matches": [
+        "https://chrome.google.com/*",
+        "https://microsoftedge.microsoft.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content-panel.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup.html",
+        "options.html",
+        "debug.html",
+        "content-panel.css"
+      ],
+      "matches": ["https://*/*"]
+    }
+  ],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+} 

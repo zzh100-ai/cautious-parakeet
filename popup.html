@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web AI Summarizer</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Web AI Summarizer</h1>
+        </div>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="analyze">一键分析</div>
+            <div class="nav-tab" data-tab="summary">摘要</div>
+            <div class="nav-tab" data-tab="qa">问答</div>
+            <div class="nav-tab" data-tab="questions">题目</div>
+            <div class="nav-tab" data-tab="settings">设置</div>
+        </div>
+
+        <!-- 一键分析面板 -->
+        <div id="analyze-tab" class="tab-content active">
+            <button id="analyze-all" class="action-button">分析页面内容</button>
+            <div class="combined-result">
+                <div class="section">
+                    <h3>页面摘要</h3>
+                    <div id="combined-summary" class="small-result-box"></div>
+                </div>
+                <div class="section">
+                    <h3>问题解答</h3>
+                    <div id="combined-answers" class="small-result-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 摘要面板 -->
+        <div id="summary-tab" class="tab-content">
+            <button id="get-summary" class="action-button">生成摘要</button>
+            <div id="summary-result" class="result-box"></div>
+        </div>
+
+        <!-- 问答面板 -->
+        <div id="qa-tab" class="tab-content">
+            <div class="question-input-container">
+                <input type="text" id="question-input" placeholder="输入您的问题">
+                <button id="ask-question" class="action-button">提问</button>
+            </div>
+            <div id="answer-result" class="result-box"></div>
+        </div>
+
+        <!-- 题目面板 -->
+        <div id="questions-tab" class="tab-content">
+            <button id="get-questions" class="action-button">识别并解答题目</button>
+            <div id="questions-result" class="result-box"></div>
+        </div>
+
+        <!-- 设置面板 -->
+        <div id="settings-tab" class="tab-content">
+            <button id="open-options" class="action-button">打开设置页面</button>
+            <button id="open-debug" class="action-button secondary">打开诊断工具</button>
+        </div>
+
+        <div id="status-message" class="status-message"></div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,62 @@
+/* Side panel styles */
+#pagetalk-panel-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  display: none;
+  transition: width 0.3s ease;
+}
+
+#pagetalk-panel-resizer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #e0e0e0;
+  cursor: col-resize;
+  z-index: 10000;
+}
+
+#pagetalk-panel-resizer:hover {
+  background: #1a73e8;
+}
+
+#pagetalk-panel-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+}
+
+/* Add right margin to the page when panel is open */
+body.pagetalk-panel-open {
+  overflow-x: hidden;
+  transition: margin-right 0.3s ease;
+}
+
+/* Ensure panel is above other elements */
+#pagetalk-panel-container * {
+  z-index: 2147483647;
+}
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+  #pagetalk-panel-container {
+    width: 100%;
+  }
+  
+  body.pagetalk-panel-open {
+    margin-right: 0 !important;
+    overflow: hidden;
+  }
+  
+  #pagetalk-panel-resizer {
+    display: none;
+  }
+} 

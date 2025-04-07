@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web AI Summarizer 配置</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .nav-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .nav-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    .nav-tab.active {
+      background-color: #fff;
+      border-bottom: 2px solid #4a90e2;
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      color: #2c3e50;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="password"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .model-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .model-preset {
+      padding: 8px 12px;
+      background-color: #f0f2f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .model-preset:hover {
+      background-color: #e0e2e5;
+    }
+    .model-preset.active {
+      background-color: #4a90e2;
+      color: white;
+      border-color: #4a90e2;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .test-result {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .status-ok {
+      color: #4CAF50;
+    }
+    .status-error {
+      color: #f44336;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    .model-category {
+      background-color: #eef2f7;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #666;
+    }
+    .cors-help {
+      background-color: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 0 4px 4px 0;
+    }
+    .cors-help h3 {
+      color: #f57c00;
+      margin-top: 0;
+    }
+    .cors-help a {
+      color: #1565c0;
+      text-decoration: none;
+    }
+    .cors-help a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Web AI Summarizer 配置</h1>
+    <p>设置AI模型、API接入和使用偏好</p>
+  </header>
+  
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-tab="settings">设置</div>
+    <div class="nav-tab" data-tab="diagnostic">诊断工具</div>
+    <div class="nav-tab" data-tab="models">模型参考</div>
+    <div class="nav-tab" data-tab="about">关于</div>
+  </div>
+  
+  <!-- 设置选项卡 -->
+  <div id="settings-tab" class="tab-content active">
+    <div class="card">
+      <h2>API 配置</h2>
+      <div class="form-group">
+        <label for="api-provider">API 提供商</label>
+        <select id="api-provider">
+          <option value="openai">OpenAI</option>
+          <option value="anthropic">Anthropic</option>
+          <option value="groq">Groq (Llama)</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="custom">自定义</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="api-endpoint">API 端点</label>
+        <input type="text" id="api-endpoint" placeholder="例如: https://openrouter.ai/api/v1/chat/completions">
+      </div>
+      
+      <div class="form-group">
+        <label for="api-key">API 密钥</label>
+        <input type="password" id="api-key" placeholder="您的API密钥">
+      </div>
+      
+      <div class="form-group">
+        <label for="model-name">AI模型</label>
+        <input type="text" id="model-name" placeholder="例如: anthropic/claude-3-haiku">
+        
+        <div class="model-presets">
+          <div class="model-preset">gpt-3.5-turbo</div>
+          <div class="model-preset">gpt-4o</div>
+          <div class="model-preset">claude-3-haiku</div>
+          <div class="model-preset">claude-3-sonnet</div>
+          <div class="model-preset">llama3-70b-8192</div>
+          <div class="model-preset">mixtral-8x7b-32768</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>Gemini API 配置</h2>
+      <div class="form-group">
+        <label for="gemini-api-key">Gemini API Key</label>
+        <input type="password" id="gemini-api-key" placeholder="例如: AIza...">
+        <p class="hint">从 <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> 获取API密钥</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="gemini-model">Gemini 模型</label>
+        <select id="gemini-model">
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+          <option value="gemini-2.0-flash-thinking-exp-01-21">Gemini 2.0 Flash Thinking</option>
+          <option value="gemini-2.0-pro-exp-02-05">Gemini 2.0 Pro</option>
+          <option value="gemini-2.5-pro-exp-03-25">Gemini 2.5 Pro</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="gemini-temperature">Temperature</label>
+        <input type="range" id="gemini-temperature" min="0" max="1" step="0.1" value="0.7">
+        <span id="gemini-temperature-value">0.7</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="gemini-max-tokens">Maximum Output Tokens</label>
+        <input type="number" id="gemini-max-tokens" min="50" max="8192" value="8192">
+      </div>
+      
+      <div class="form-group">
+        <label for="gemini-top-p">Top P</label>
+        <input type="range" id="gemini-top-p" min="0" max="1" step="0.05" value="0.95">
+        <span id="gemini-top-p-value">0.95</span>
+      </div>
+      
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="gemini-auto-extract" checked>
+          <label for="gemini-auto-extract">自动提取页面内容</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="gemini-enable-image-upload" checked>
+          <label for="gemini-enable-image-upload">启用图片上传功能</label>
+        </div>
+      </div>
+      
+      <button id="test-gemini-api" class="test-btn">测试 Gemini 连接</button>
+      <div id="gemini-connection-status"></div>
+    </div>
+    
+    <div class="card">
+      <h2>高级设置</h2>
+      <div class="form-group">
+        <label for="max-tokens">最大生成长度</label>
+        <input type="number" id="max-tokens" min="100" max="4000" placeholder="例如: 1000">
+      </div>
+      
+      <div class="form-group">
+        <label for="timeout">请求超时(秒)</label>
+        <input type="number" id="timeout" min="5" max="60" placeholder="例如: 15">
+      </div>
+      
+      <div class="form-group">
+        <label for="content-length">内容长度限制(字符)</label>
+        <input type="number" id="content-length" min="1000" max="10000" placeholder="例如: 5000">
+      </div>
+      
+      <div class="form-group">
+        <label for="retry-count">失败重试次数</label>
+        <input type="number" id="retry-count" min="0" max="5" placeholder="例如: 2">
+      </div>
+    </div>
+    
+    <div class="button-group">
+      <button id="save-settings" class="primary">保存设置</button>
+      <button id="reset-settings">恢复默认</button>
+      <button id="test-api">测试API连接</button>
+    </div>
+    
+    <div id="settings-status"></div>
+    
+    <!-- CORS问题解决方案 -->
+    <div id="cors-solutions"></div>
+  </div>
+  
+  <!-- 诊断工具选项卡 -->
+  <div id="diagnostic-tab" class="tab-content">
+    <div class="card">
+      <h2>扩展状态检查</h2>
+      <button id="checkStatus">检查扩展状态</button>
+      <div id="statusResult"></div>
+    </div>
+    
+    <div class="card">
+      <h2>内容脚本检查</h2>
+      <p>测试content script是否能正确加载和通信：</p>
+      <button id="checkContent">测试内容脚本</button>
+      <div id="contentResult"></div>
+    </div>
+    
+    <div class="card">
+      <h2>API连接测试</h2>
+      <p>测试与AI服务提供商的连接是否正常：</p>
+      <button id="testAPI">测试API连接</button>
+      <div id="apiResult"></div>
+    </div>
+    
+    <div class="card">
+      <h2>CORS问题诊断</h2>
+      <p>如果您遇到API连接问题，可能是由于CORS(跨域资源共享)限制：</p>
+      <button id="checkCors">检查CORS兼容性</button>
+      <div id="corsResult"></div>
+    </div>
+    
+    <div class="card">
+      <h2>常见问题解决</h2>
+      <h3>无法与页面建立连接</h3>
+      <ul>
+        <li>尝试刷新当前页面</li>
+        <li>确保您不在浏览器内部页面（如chrome://、about:、新标签页等）</li>
+        <li>某些网站可能有内容安全策略(CSP)阻止内容脚本运行</li>
+      </ul>
+      
+      <h3>API连接失败</h3>
+      <ul>
+        <li>检查您的API密钥是否正确</li>
+        <li>确认您选择的API端点是否正确</li>
+        <li>检查所选模型名称是否可用</li>
+        <li>如使用OpenRouter，确保您的API密钥有足够的额度</li>
+      </ul>
+      
+      <h3>超时或请求时间过长</h3>
+      <ul>
+        <li>在设置中增加超时时间</li>
+        <li>减少分析内容的长度</li>
+        <li>选择响应更快的模型（如Groq的llama3-8b或Anthropic的Haiku）</li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- 模型参考选项卡 -->
+  <div id="models-tab" class="tab-content">
+    <div class="card">
+      <h2>常用模型参考</h2>
+      <p>以下是一些常用的AI模型及其特点，您可以根据需要选择合适的模型。</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>模型名称</th>
+            <th>提供商</th>
+            <th>特点</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="model-category">
+            <td colspan="3">OpenAI 模型</td>
+          </tr>
+          <tr>
+            <td>gpt-4o</td>
+            <td>OpenAI</td>
+            <td>最强大的模型，上下文窗口 128K，支持视觉功能</td>
+          </tr>
+          <tr>
+            <td>gpt-4-turbo</td>
+            <td>OpenAI</td>
+            <td>强大的大模型，上下文窗口 128K，知识截止日期到 2023 年 12 月</td>
+          </tr>
+          <tr>
+            <td>gpt-3.5-turbo</td>
+            <td>OpenAI</td>
+            <td>更经济的选择，上下文窗口 16K，适合常见场景</td>
+          </tr>
+          
+          <tr class="model-category">
+            <td colspan="3">Anthropic 模型</td>
+          </tr>
+          <tr>
+            <td>claude-3-opus</td>
+            <td>Anthropic</td>
+            <td>最先进的Claude模型，推理能力最强</td>
+          </tr>
+          <tr>
+            <td>claude-3-sonnet</td>
+            <td>Anthropic</td>
+            <td>平衡型Claude模型，性能和速度兼顾</td>
+          </tr>
+          <tr>
+            <td>claude-3-haiku</td>
+            <td>Anthropic</td>
+            <td>快速高效的Claude模型，适合快速摘要和即时响应</td>
+          </tr>
+          
+          <tr class="model-category">
+            <td colspan="3">Groq 模型</td>
+          </tr>
+          <tr>
+            <td>llama3-70b-8192</td>
+            <td>Groq</td>
+            <td>Meta的Llama 3 70B模型，通过Groq的超快推理</td>
+          </tr>
+          <tr>
+            <td>llama3-8b-8192</td>
+            <td>Groq</td>
+            <td>Meta的Llama 3 8B模型，更轻量但速度极快</td>
+          </tr>
+          
+          <tr class="model-category">
+            <td colspan="3">OpenRouter 模型</td>
+          </tr>
+          <tr>
+            <td>anthropic/claude-3-haiku</td>
+            <td>OpenRouter</td>
+            <td>通过OpenRouter访问Claude 3 Haiku</td>
+          </tr>
+          <tr>
+            <td>openai/gpt-3.5-turbo</td>
+            <td>OpenRouter</td>
+            <td>通过OpenRouter访问GPT-3.5 Turbo</td>
+          </tr>
+          <tr>
+            <td>google/gemini-pro</td>
+            <td>OpenRouter</td>
+            <td>通过OpenRouter访问Google的Gemini Pro</td>
+          </tr>
+          
+          <tr class="model-category">
+            <td colspan="3">Google Gemini 模型</td>
+          </tr>
+          <tr>
+            <td>gemini-2.0-flash</td>
+            <td>Google</td>
+            <td>最新的Gemini 2.0 Flash模型，响应速度快，支持多模态输入，适合日常对话和简短内容生成</td>
+          </tr>
+          <tr>
+            <td>gemini-2.0-pro</td>
+            <td>Google</td>
+            <td>最新的Gemini 2.0 Pro模型，功能更强大，支持多模态输入，适合复杂任务和详细内容生成</td>
+          </tr>
+          <tr>
+            <td>gemini-2.5-pro</td>
+            <td>Google</td>
+            <td>Gemini 2.5 Pro试验版模型，性能更优，支持更高级的多模态理解，可用于复杂场景</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p>注意：模型可用性和性能可能会随时变化，请参考各提供商的官方文档获取最新信息。</p>
+    </div>
+  </div>
+  
+  <!-- 关于选项卡 -->
+  <div id="about-tab" class="tab-content">
+    <div class="card">
+      <h2>关于 Web AI Summarizer</h2>
+      <p>版本: 1.2.0</p>
+      <p>Web AI Summarizer是一个浏览器扩展，使用人工智能技术帮助用户快速理解网页内容。</p>
+      <p>主要功能：</p>
+      <ul>
+        <li>生成网页内容的简明摘要</li>
+        <li>回答关于网页内容的特定问题</li>
+        <li>自动发现并解答页面上的问题</li>
+        <li>支持多种AI模型和API提供商</li>
+      </ul>
+      
+      <h3>隐私说明</h3>
+      <p>本扩展处理的所有内容（包括网页内容和您的问题）仅用于请求AI服务。我们不收集、存储或传输任何用户数据。您的API密钥和设置仅保存在浏览器本地。</p>
+      
+      <h3>支持的API</h3>
+      <ul>
+        <li>OpenAI API (ChatGPT)</li>
+        <li>Anthropic API (Claude)</li>
+        <li>Groq API (Llama)</li>
+        <li>OpenRouter (多模型聚合服务)</li>
+        <li>自定义端点</li>
+      </ul>
+      
+      <p>如有问题或建议，请通过GitHub提交issues或联系开发者。</p>
+    </div>
+  </div>
+  
+  <footer>
+    <p>Web AI Summarizer &copy; 2023-2024</p>
+  </footer>
+  
+  <script src="proxy.js"></script>
+  <script src="options.js"></script>
+  <script src="debug.js"></script>
+</body>
+</html> 
